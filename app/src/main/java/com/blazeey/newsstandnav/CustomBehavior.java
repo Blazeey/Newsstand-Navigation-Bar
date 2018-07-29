@@ -10,11 +10,13 @@ import android.view.View;
 public class CustomBehavior extends AppBarLayout.ScrollingViewBehavior {
 
     private Context context;
+    private ViewChangedListener listener;
 
     private static final String TAG = "Behavior";
 
-    public CustomBehavior(Context context) {
+    public CustomBehavior(Context context,ViewChangedListener listener) {
         this.context = context;
+        this.listener = listener;
     }
 
     @Override
@@ -26,15 +28,13 @@ public class CustomBehavior extends AppBarLayout.ScrollingViewBehavior {
     public boolean onDependentViewChanged(CoordinatorLayout parent, View child, View dependency) {
         super.onDependentViewChanged(parent, child, dependency);
 
-        Log.d(TAG, "onDependentViewChanged: Dependency : "+dependency.getX());
-        Log.d(TAG, "onDependentViewChanged: Dependency : "+dependency.getY());
-
-        Log.d(TAG, "onDependentViewChanged: Child: "+child.getX());
-        Log.d(TAG, "onDependentViewChanged: Child: "+child.getY());
-
         ViewPager viewPager = child.findViewById(R.id.viewpager);
-
+        listener.onHeightChanged(child.getY());
         return true;
+    }
+
+    public interface ViewChangedListener{
+        void onHeightChanged(float height);
     }
 
 }
