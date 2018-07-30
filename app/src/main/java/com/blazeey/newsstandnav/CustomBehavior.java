@@ -3,8 +3,6 @@ package com.blazeey.newsstandnav;
 import android.content.Context;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.View;
 
 public class CustomBehavior extends AppBarLayout.ScrollingViewBehavior {
@@ -28,7 +26,6 @@ public class CustomBehavior extends AppBarLayout.ScrollingViewBehavior {
     public boolean onDependentViewChanged(CoordinatorLayout parent, View child, View dependency) {
         super.onDependentViewChanged(parent, child, dependency);
 
-        ViewPager viewPager = child.findViewById(R.id.viewpager);
         listener.onHeightChanged(child.getY());
         return true;
     }

@@ -34,7 +34,6 @@ public class CustomTabs extends PagerAdapter {
         TextView tabName = view.findViewById(R.id.text);
         Title title = tabNames.get(position);
         tabName.setText(title.getTitle());
-//        background.setImageDrawable(new ColorDrawable(context.getResources().getColor( title.getResource())));
 
         container.addView(view);
         return view;

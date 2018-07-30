@@ -17,19 +17,17 @@ public class CustomViewPager extends ViewPager{
     }
 
     @Override
-    public void scrollTo(int x, int y) {
-        x -= (int) (getMeasuredWidth() * (1 - getAdapter().getPageWidth(getCurrentItem())) / 2);
-
-        super.scrollTo(x, y);
-    }
-
-    @Override
     public void setPadding(int left, int top, int right, int bottom) {
         super.setPadding(left, top, right, bottom);
     }
 
-    public void setPaddin(int left, int top, int right, int bottom,int current){
-        if(getCurrentItem()==current)
-            setPadding(left,top ,right , bottom);
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+    }
+
+    @Override
+    public void setPageMargin(int marginPixels) {
+        super.setPageMargin(marginPixels);
     }
 }

@@ -9,8 +9,8 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.View;
 import android.widget.ImageView;
 
 import com.blazeey.newsstandnav.Model.Title;
@@ -18,11 +18,14 @@ import com.blazeey.newsstandnav.Model.Title;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.blazeey.newsstandnav.Utils.AlgorithmUtils.minMax;
+
 public class MainActivity extends AppCompatActivity {
 
     ImageView titleBackground;
     Context context;
     ViewPager viewPager;
+    int offset = 36;
     int viewPagerPadding = 200;
     CollapsingToolbarLayout collapsingToolbarLayout;
     List<Title> tabNames = new ArrayList<>();
@@ -36,9 +39,9 @@ public class MainActivity extends AppCompatActivity {
         collapsingToolbarLayout = findViewById(R.id.collapsing_toolbar);
         titleBackground = findViewById(R.id.back);
         viewPager = findViewById(R.id.viewpager);
-        viewPager.setPageMargin(50);
         viewPager.setClipToPadding(false);
-        viewPager.setPadding(0, 0, 0, 0);
+        viewPagerPadding=200;
+        viewPager.setPadding(viewPagerPadding, 0, viewPagerPadding, 0);
         tabNames.add(new Title("Gaming", R.color.red));
         tabNames.add(new Title("Science", R.color.green));
         tabNames.add(new Title("Sports", R.color.colorAccent));
@@ -56,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
     ViewPager.OnPageChangeListener pageChange = new ViewPager.OnPageChangeListener() {
         @Override
         public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-            Log.v("Pixels",positionOffset+","+positionOffsetPixels );
+            Log.v("Pixels",positionOffset+","+positionOffsetPixels);
             titleBackground.setImageDrawable(new ColorDrawable(context.getResources().getColor(tabNames.get(position).getResource())));
         }
 
@@ -74,16 +77,21 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onHeightChanged(float height) {
             AppBarLayout appBarLayout = findViewById(R.id.app_bar);
+            Toolbar toolbar = findViewById(R.id.toolbar);
             int heightAppbar = appBarLayout.getHeight();
-            viewPagerPadding = (200 / 100) * ((int) (height * 100) / heightAppbar);
-            viewPager.setPageMargin(0);
+            int heightToolbar = toolbar.getHeight();
+            int old = viewPagerPadding;
+
+            viewPagerPadding = (int) minMax(heightToolbar,heightAppbar,0,200,height);
             viewPager.setPadding(viewPagerPadding, 0, viewPagerPadding, 0);
-            viewPager.requestLayout();
+
             int curr = viewPager.getCurrentItem();
-            View view = viewPager.getChildAt(0);
-            int totalOffset = curr*view.getWidth();
-            viewPager.scrollTo(totalOffset,0);
-            Log.v("X", totalOffset+"");
+
+            if(curr!=0){
+                viewPager.scrollBy((2*curr*(old-viewPagerPadding)),0);
+            }
+            Log.v("Scroll",offset+"");
+
             Log.v("Listener", viewPagerPadding + "");
         }
     };
