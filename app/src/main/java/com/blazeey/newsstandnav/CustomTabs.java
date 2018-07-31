@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.blazeey.newsstandnav.Model.Title;
@@ -18,18 +19,16 @@ public class CustomTabs extends PagerAdapter {
 
     private Context context;
     private List<Title> tabNames;
-    private ImageView background;
 
-    public CustomTabs(Context context, List<Title> tabNames, ImageView background){
+    public CustomTabs(Context context, List<Title> tabNames){
         this.context = context;
         this.tabNames = tabNames;
-        this.background = background;
     }
 
     @NonNull
     @Override
     public Object instantiateItem(@NonNull ViewGroup container, int position) {
-        ViewGroup view = (ViewGroup) LayoutInflater.from(context).inflate(R.layout.item_tab,null,false);
+        RelativeLayout view = (RelativeLayout) LayoutInflater.from(context).inflate(R.layout.item_tab,null,false);
 
         TextView tabName = view.findViewById(R.id.text);
         Title title = tabNames.get(position);

@@ -1,6 +1,7 @@
 package com.blazeey.newsstandnav;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
@@ -11,7 +12,9 @@ import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.blazeey.newsstandnav.Model.Title;
 
@@ -41,12 +44,13 @@ public class MainActivity extends AppCompatActivity {
         viewPager = findViewById(R.id.viewpager);
         viewPager.setClipToPadding(false);
         viewPagerPadding=200;
+        viewPager.setOffscreenPageLimit(10);
         viewPager.setPadding(viewPagerPadding, 0, viewPagerPadding, 0);
-        tabNames.add(new Title("Gaming", R.color.red));
-        tabNames.add(new Title("Science", R.color.green));
-        tabNames.add(new Title("Sports", R.color.colorAccent));
-        tabNames.add(new Title("Technology", R.color.colorPrimary));
-        CustomTabs customTabs = new CustomTabs(this, tabNames, titleBackground);
+        tabNames.add(new Title("GAMING", R.color.red));
+        tabNames.add(new Title("SCIENCE", R.color.green));
+        tabNames.add(new Title("SPORTS", R.color.colorAccent));
+        tabNames.add(new Title("TECHNOLOGY", R.color.colorPrimary));
+        CustomTabs customTabs = new CustomTabs(this, tabNames);
         viewPager.setAdapter(customTabs);
         viewPager.addOnPageChangeListener(pageChange);
 
@@ -59,8 +63,9 @@ public class MainActivity extends AppCompatActivity {
     ViewPager.OnPageChangeListener pageChange = new ViewPager.OnPageChangeListener() {
         @Override
         public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-            Log.v("Pixels",positionOffset+","+positionOffsetPixels);
             titleBackground.setImageDrawable(new ColorDrawable(context.getResources().getColor(tabNames.get(position).getResource())));
+            HorizontalTabs horizontalTabs = viewPager.getChildAt(position).findViewById(R.id.tabs);
+            horizontalTabs.setSelected(position);
         }
 
         @Override
@@ -86,14 +91,29 @@ public class MainActivity extends AppCompatActivity {
             viewPager.setPadding(viewPagerPadding, 0, viewPagerPadding, 0);
 
             int curr = viewPager.getCurrentItem();
+            if(curr!=0){
+                disableHighlight(viewPager.getChildAt(curr-1));
+            }
+            if (curr != tabNames.size()-1) {
+                disableHighlight(viewPager.getChildAt(curr+1));
+            }
+            if(viewPager.getChildAt(curr)!=null)
+                highlight(viewPager.getChildAt(curr));
 
             if(curr!=0){
                 viewPager.scrollBy((2*curr*(old-viewPagerPadding)),0);
             }
-            Log.v("Scroll",offset+"");
-
-            Log.v("Listener", viewPagerPadding + "");
+            
         }
     };
 
+    void disableHighlight(View view){
+        TextView textView = view.findViewById(R.id.text);
+        textView.setTextColor(Color.LTGRAY);
+    }
+
+    void highlight(View view){
+        TextView textView = view.findViewById(R.id.text);
+        textView.setTextColor(Color.WHITE);
+    }
 }
